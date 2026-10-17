@@ -1,0 +1,37 @@
+/**:
+  ros__parameters:
+    wheel_track: 0.4     # m
+    wheel_radius: 0.08   # m
+
+amr_sim:
+  ros__parameters:
+    rate: 50.0
+    scan_rate: 5.0
+    start_x: 1.0         # true start pose in the map (m)
+    start_y: 1.0
+    slip_factor: 1.0     # < 1.0 emulates slip (true yaw rate scaled)
+    slip_start: 0.0
+
+can_bridge:
+  ros__parameters:
+    rate: 50.0
+    can_channel: amr     # python-can virtual channel
+    fault: none          # none | encoder_dropout | stuck_left | stuck_right
+    fault_start: 0.0
+
+waypoint_follower:
+  ros__parameters:
+    waypoints: [2.5, 0.0, 2.5, 1.2, 0.0, 1.2, 0.0, 0.0]   # x0, y0, x1, y1, ... in odom frame
+    loop: true
+    v_max: 0.4
+    w_max: 1.5
+    tolerance: 0.15
+
+amr_diagnostics:
+  ros__parameters:
+    encoder_timeout: 0.2
+    stuck_cmd_min: 1.0
+    stuck_meas_max: 0.1
+    stuck_time: 0.5
+    slip_yaw_thresh: 0.15
+    slip_time: 0.3

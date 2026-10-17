@@ -1,0 +1,50 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pytest python-can
+      - run: python -m pytest test -v
+
+  ros2-humble:
+    runs-on: ubuntu-latest
+    container: ros:humble
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: src/ros2_amr_bench
+      - name: Install dependencies
+        run: |
+          apt-get update
+          rosdep update --rosdistro humble
+          rosdep install --from-paths src -y --ignore-src
+      - name: colcon build
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon build --symlink-install
+      - name: colcon test
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon test --event-handlers console_direct+
+          colcon test-result --verbose
+      - name: Launch smoke test (stuck_left fault must reach /diagnostics)
+        run: |
+          source install/setup.bash
+          ros2 launch ros2_amr_bench bench.launch.py fault:=stuck_left fault_start:=3.0 > launch.log 2>&1 &
+          sleep 12
+          timeout 10 ros2 topic echo --once /odom nav_msgs/msg/Odometry | head -20
+          timeout 10 ros2 topic echo --once /scan sensor_msgs/msg/LaserScan --field angle_increment
+          timeout 10 ros2 topic echo --once /diagnostics diagnostic_msgs/msg/DiagnosticArray > diag.txt
+          cat diag.txt
+          kill %1 || true
+          cat launch.log
+          grep -q "left motor stuck" diag.txt

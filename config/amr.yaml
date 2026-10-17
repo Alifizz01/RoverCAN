@@ -9,15 +9,15 @@ amr_sim:
     scan_rate: 5.0
     start_x: 1.0         # true start pose in the map (m)
     start_y: 1.0
-    slip_factor: 1.0     # < 1.0 emulates slip (true yaw rate scaled)
-    slip_start: 0.0
+    # slip_factor / slip_start are set from launch arguments (see bench.launch.py)
 
 can_bridge:
   ros__parameters:
     rate: 50.0
     can_channel: amr     # python-can virtual channel
-    fault: none          # none | encoder_dropout | stuck_left | stuck_right
-    fault_start: 0.0
+    # fault (none | encoder_dropout | stuck_left | stuck_right) and fault_start are
+    # set from launch arguments: launch_ros passes them under /**, and a node-named
+    # entry in this file would take precedence over them.
 
 waypoint_follower:
   ros__parameters:

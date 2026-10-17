@@ -65,6 +65,7 @@ With ROS 2 Humble:
 ```bash
 mkdir -p ws/src && cd ws/src && git clone https://github.com/Alifizz01/ros2-amr-bench.git
 cd .. && rosdep install --from-paths src -y --ignore-src
+pip3 install "python-can>=4.0"  # Ubuntu 22.04's python3-can package is missing aenum
 colcon build && source install/setup.bash
 ros2 launch ros2_amr_bench bench.launch.py
 # inject faults

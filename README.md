@@ -1,6 +1,33 @@
-# ros2-amr-bench
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo.svg" alt="RoverCAN" width="360">
+  </picture>
+</p>
 
-[![CI](https://github.com/Alifizz01/ros2-amr-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/Alifizz01/ros2-amr-bench/actions/workflows/ci.yml)
+<p align="center">
+  <b>A simulated ROS 2 robot whose wheels are driven over CAN.</b><br>
+  Waypoint follower, CAN motor bridge and fault diagnostics for a differential-drive AMR. No robot needed: it all runs on a virtual CAN bus.
+</p>
+
+<p align="center">
+  <a href="https://github.com/Alifizz01/RoverCAN/actions/workflows/ci.yml"><img src="https://github.com/Alifizz01/RoverCAN/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/ROS%202-Humble-22314E" alt="ROS 2">
+  <img src="https://img.shields.io/badge/python-3.10%2B-3776AB" alt="python">
+  <img src="https://img.shields.io/badge/CAN-python--can-3DBFA7" alt="CAN">
+</p>
+
+<p align="center"><img src="docs/hero.png" alt="Odometry from CAN encoder frames following three waypoints in closed loop" width="900"></p>
+
+> **Scope:** Simulated robot only: kinematics, no Gazebo/Nav2/SLAM, virtual CAN bus (not SocketCAN hardware), illustrative fault thresholds. Personal portfolio project, not affiliated with any employer.
+
+---
+
+## The problem
+
+Robot software is usually tested either in a full simulator or on the real robot. The layer in between, where a `/cmd_vel` becomes motor CAN frames and encoder frames come back, is where counters, checksums and timeouts break, and it is rarely tested on its own.
+
+## Overview
 
 A small ROS 2 (Humble) Python package for a **simulated** differential-drive AMR:
 a kinematic simulator, a waypoint follower, a CAN motor bridge that turns `/cmd_vel`
